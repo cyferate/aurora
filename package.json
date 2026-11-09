@@ -1,0 +1,31 @@
+{
+  "name": "aurora-proxy-platform",
+  "version": "1.0.0",
+  "description": "AURORA — Advanced Unified Router & Orchestration Architecture for Claude Code",
+  "scripts": {
+    "setup": "npm run setup:harness && npm run setup:dashboard && npm run setup:proxy",
+    "setup:harness": "cd harness && npm install",
+    "setup:dashboard": "cd dashboard && npm install",
+    "setup:proxy": "cd proxy && C:\\Users\\Divyanshu\\anaconda3\\python.exe -m pip install -r requirements.txt --quiet",
+
+    "start": "node start.mjs",
+    "start:harness": "cd harness && node index.js",
+    "start:proxy": "cd proxy && C:\\Users\\Divyanshu\\anaconda3\\python.exe -m uvicorn main:app --host 0.0.0.0 --port 8082 --reload",
+    "start:dashboard": "cd dashboard && npm run dev",
+    "start:omnirush": "cd omnirush && bun apps/server/src/cli.ts --config omnirush-aurora.config.json",
+
+    "dev": "npm run start",
+
+    "build": "cd dashboard && npm run build",
+    "build:dashboard": "cd dashboard && npm run build",
+
+    "health": "curl -s http://localhost:20128/health && curl -s http://localhost:8082/health",
+
+    "claude": "set ANTHROPIC_BASE_URL=http://localhost:20128/v1 && set ANTHROPIC_API_KEY=aurora-proxy && claude",
+
+    "env": "echo ANTHROPIC_BASE_URL=http://localhost:20128/v1 && echo ANTHROPIC_API_KEY=aurora-proxy"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

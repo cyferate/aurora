@@ -1,0 +1,19 @@
+{
+  "name": "aurora-harness",
+  "version": "1.0.0",
+  "description": "AURORA Node.js CLI Gateway — intercepts Claude Code and routes to proxy",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "http-proxy-middleware": "^3.0.0",
+    "dotenv": "^16.3.1",
+    "chalk": "^5.3.0",
+    "open": "^10.1.0",
+    "ws": "^8.16.0"
+  }
+}
+

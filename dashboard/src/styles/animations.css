@@ -1,0 +1,201 @@
+/* ============================================================
+   AURORA Animations & Visual Effects
+   CRT scanlines, glitch transitions, pulse effects, odometers
+   ============================================================ */
+
+/* ── CRT Scanlines overlay ─────────────────────────────────── */
+.crt-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.08) 2px,
+    rgba(0, 0, 0, 0.08) 4px
+  );
+  animation: crtFlicker 0.15s infinite;
+}
+
+@keyframes crtFlicker {
+  0%   { opacity: 1; }
+  50%  { opacity: 0.97; }
+  100% { opacity: 1; }
+}
+
+/* Moving scanline */
+.crt-scanline {
+  position: fixed;
+  left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(0, 245, 255, 0.06) 20%,
+    rgba(0, 245, 255, 0.12) 50%,
+    rgba(0, 245, 255, 0.06) 80%,
+    transparent 100%
+  );
+  animation: scanlineMove 8s linear infinite;
+  pointer-events: none;
+  z-index: 9998;
+}
+
+@keyframes scanlineMove {
+  0%   { top: -2px; }
+  100% { top: 100vh; }
+}
+
+/* ── Glitch text effect ────────────────────────────────────── */
+.glitch {
+  position: relative;
+  animation: glitchShake 4s infinite;
+}
+
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+}
+
+.glitch::before {
+  animation: glitchTop 4s infinite;
+  clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
+  color: var(--aurora-cyan);
+  text-shadow: -2px 0 var(--aurora-cyan);
+}
+
+.glitch::after {
+  animation: glitchBottom 4s infinite;
+  clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
+  color: var(--aurora-magenta);
+  text-shadow: 2px 0 var(--aurora-magenta);
+}
+
+@keyframes glitchShake {
+  0%, 94%, 100% { transform: none; }
+  95%  { transform: skew(-2deg, -1deg); }
+  96%  { transform: skew(2deg, 1deg); }
+  97%  { transform: skew(-1deg, 0); }
+}
+
+@keyframes glitchTop {
+  0%, 94%, 100% { transform: none; opacity: 0; }
+  95%  { transform: translate(-3px, -1px); opacity: 0.8; }
+  96%  { transform: translate(3px, 1px);  opacity: 0.5; }
+  97%  { transform: translate(-1px, 0);   opacity: 0; }
+}
+
+@keyframes glitchBottom {
+  0%, 94%, 100% { transform: none; opacity: 0; }
+  95%  { transform: translate(3px, 1px);  opacity: 0.8; }
+  96%  { transform: translate(-3px, -1px); opacity: 0.5; }
+  97%  { transform: translate(1px, 0);    opacity: 0; }
+}
+
+/* ── Neon pulse border ─────────────────────────────────────── */
+.pulse-border-cyan {
+  animation: pulseBorderCyan 2s ease-in-out infinite;
+}
+
+@keyframes pulseBorderCyan {
+  0%, 100% { box-shadow: 0 0 5px rgba(0,245,255,0.3), inset 0 0 5px rgba(0,245,255,0.05); }
+  50%       { box-shadow: 0 0 20px rgba(0,245,255,0.6), 0 0 40px rgba(0,245,255,0.2), inset 0 0 10px rgba(0,245,255,0.1); }
+}
+
+.pulse-border-magenta {
+  animation: pulseBorderMagenta 2s ease-in-out infinite;
+}
+
+@keyframes pulseBorderMagenta {
+  0%, 100% { box-shadow: 0 0 5px rgba(255,0,170,0.3), inset 0 0 5px rgba(255,0,170,0.05); }
+  50%       { box-shadow: 0 0 20px rgba(255,0,170,0.6), 0 0 40px rgba(255,0,170,0.2), inset 0 0 10px rgba(255,0,170,0.1); }
+}
+
+/* ── Spinning loader ───────────────────────────────────────── */
+.aurora-spinner {
+  width: 24px; height: 24px;
+  border: 2px solid var(--aurora-bg-elevated);
+  border-top-color: var(--aurora-cyan);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Node pulse (for React Flow active nodes) ──────────────── */
+@keyframes nodePulse {
+  0%, 100% { box-shadow: 0 0 10px var(--aurora-cyan-glow); }
+  50%       { box-shadow: 0 0 25px var(--aurora-cyan), 0 0 50px var(--aurora-cyan-glow); }
+}
+
+.node-active { animation: nodePulse 1.5s ease-in-out infinite; }
+
+/* ── Packet travel along edges ─────────────────────────────── */
+@keyframes packetTravel {
+  0%   { stroke-dashoffset: 1000; opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
+}
+
+.animated-edge {
+  stroke-dasharray: 8 4;
+  animation: edgeDash 1.5s linear infinite;
+}
+
+@keyframes edgeDash {
+  to { stroke-dashoffset: -36; }
+}
+
+/* ── Typewriter cursor ─────────────────────────────────────── */
+.typewriter-cursor::after {
+  content: '█';
+  color: var(--aurora-cyan);
+  animation: cursorBlink 1s step-end infinite;
+}
+
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* ── Fade-in entrance ──────────────────────────────────────── */
+.fade-in-up {
+  animation: fadeInUp 0.5s ease forwards;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Staggered children */
+.stagger-children > *:nth-child(1) { animation-delay: 0.05s; }
+.stagger-children > *:nth-child(2) { animation-delay: 0.10s; }
+.stagger-children > *:nth-child(3) { animation-delay: 0.15s; }
+.stagger-children > *:nth-child(4) { animation-delay: 0.20s; }
+.stagger-children > *:nth-child(5) { animation-delay: 0.25s; }
+
+/* ── Status indicator dot ──────────────────────────────────── */
+.status-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-dot.active  { background: var(--aurora-green);   box-shadow: 0 0 6px var(--aurora-green); animation: statusPulse 2s infinite; }
+.status-dot.error   { background: var(--aurora-red);     box-shadow: 0 0 6px var(--aurora-red); }
+.status-dot.cooldown{ background: var(--aurora-yellow);  box-shadow: 0 0 6px var(--aurora-yellow); }
+.status-dot.offline { background: var(--aurora-text-muted); }
+
+@keyframes statusPulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
